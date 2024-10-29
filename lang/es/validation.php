@@ -182,5 +182,8 @@ return [
         'title'                 => 'título',
         'username'              => 'usuario',
         'year'                  => 'año',
+        'speciality'            => 'carrera',
+        'grade'                 => 'grado',
+        'participated_before'   => 'participado antes'
     ],
 ];

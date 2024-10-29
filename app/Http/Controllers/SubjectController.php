@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
@@ -24,15 +25,17 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store (Request $request) {
-        Subject::create(
-            $request->validate([
-                'gender' => ['nullable', 'present'],
-                'age' => ['required', 'integer'],
-                'speciality' => ['required', 'string'],
-                'grade' => ['required', 'integer'],
-                'participated_before' => ['required', 'boolean'],
-            ])
-        );
+        $data = $request->validate([
+            'gender' => ['required', 'string', 'in:Hombre,Mujer,Prefiero no contestar'],
+            'age' => ['required', 'integer'],
+            'speciality' => ['required', 'string'],
+            'grade' => ['required', 'integer'],
+            'participated_before' => ['required', 'boolean'],
+        ]);
+
+        $data['user_id'] = Auth::id();
+
+        Subject::create($data);
 
         return response()->json([
             'message' => 'Datos guardados correctamente'
