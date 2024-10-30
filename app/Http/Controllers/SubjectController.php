@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
@@ -35,7 +36,13 @@ class SubjectController extends Controller
 
         $data['user_id'] = Auth::id();
 
-        Subject::create($data);
+        DB::transaction(function () use ($data, $request) {
+            Subject::create($data);
+
+            $user = $request->user();
+            $user->step = 'instructions';
+            $user->save();
+        });
 
         return response()->json([
             'message' => 'Datos guardados correctamente'

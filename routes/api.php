@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\QuestionController;
 
@@ -15,4 +17,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Questions
     Route::get('/questions/get-subject-question', [QuestionController::class, 'getSubjectQuestion']);
+    
+    // Users
+    Route::put('/users/update-step', [UserController::class, 'updateStep']);
+
+    // Answers
+    Route::apiResource('answers', AnswerController::class)->only(['index', 'store']);
 });
