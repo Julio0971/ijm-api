@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('password');
+            $table->enum('role', [
+                'admin',
+                'participant'
+            ]);
             $table->enum('step', [
                 'home',
                 'notice',
@@ -24,7 +28,7 @@ return new class extends Migration
                 'instructions',
                 'dilemma',
                 'thank-you'
-            ])->default('home');
+            ])->default('home')->nullable();
             $table->timestamps();
         });
     }
