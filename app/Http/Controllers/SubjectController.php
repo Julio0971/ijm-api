@@ -16,7 +16,7 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index () {
-        return Subject::paginate(10);
+        return Subject::with('answer.question')->paginate(10);
     }
 
     /**
