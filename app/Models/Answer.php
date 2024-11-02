@@ -9,14 +9,13 @@ use DateTimeInterface;
 class Answer extends Model
 {
     protected $guarded = [];
-
-    /**
-     * Get the question  that owns the Answer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    
+    public function subject () {
+        return $this->belongsTo(Subject::class);
+    }
+    
     public function question () {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(QUestion::class);
     }
 
     protected function serializeDate (DateTimeInterface $date) {

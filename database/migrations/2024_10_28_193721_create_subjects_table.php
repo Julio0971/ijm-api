@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 use App\Models\User;
+use App\Models\Question;
 
 return new class extends Migration
 {
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->enum('grade', [1, 2, 3, 4, 5, 6, 7, 8]);
             $table->boolean('participated_before');
             $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(Question::class)->constrained();
             $table->timestamps();
         });
     }

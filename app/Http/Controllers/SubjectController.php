@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
+use App\Models\Question;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index () {
-        return Subject::with('answer.question')->paginate(10);
+        return Subject::with(['question.answer', 'answers.question'])->paginate(10);
     }
 
     /**
@@ -37,6 +38,17 @@ class SubjectController extends Controller
         $data['user_id'] = Auth::id();
 
         DB::transaction(function () use ($data, $request) {
+            $question_name = 'Variante 1 (hombre)';
+            $latest_subject = Subject::latest()->first();
+
+            if ($latest_subject && $latest_subject->id % 3 == 0) {
+                $question_name = 'Variante 3 (neutro)';
+            } else if ($latest_subject && $latest_subject->id % 2 == 0) {
+                $question_name = 'Variante 2 (mujer)';
+            }
+
+            $data['question_id'] = Question::where('name', $question_name)->value('id');
+
             Subject::create($data);
 
             $user = $request->user();

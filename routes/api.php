@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('subjects', SubjectController::class)->only(['index', 'store']);
 
     // Questions
-    Route::get('/questions/get-subject-question', [QuestionController::class, 'getSubjectQuestion']);
+    Route::get('/questions/{question_name}', [QuestionController::class, 'show']);
     
     // Users
     Route::put('/users/update-step', [UserController::class, 'updateStep']);

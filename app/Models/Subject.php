@@ -14,8 +14,12 @@ class Subject extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function answer () {
-        return $this->hasOne(Answer::class);
+    public function question () {
+        return $this->belongsTo(Question::class);
+    }
+    
+    public function answers () {
+        return $this->hasMany(Answer::class);
     }
 
     protected function serializeDate (DateTimeInterface $date) {
