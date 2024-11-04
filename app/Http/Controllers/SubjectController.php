@@ -7,7 +7,6 @@ use App\Models\Question;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
@@ -35,9 +34,7 @@ class SubjectController extends Controller
             'participated_before' => ['required', 'boolean'],
         ]);
 
-        $data['user_id'] = Auth::id();
-
-        DB::transaction(function () use ($data, $request) {
+        $response = DB::transaction(function () use ($data) {
             $question_name = 'Variante 1 (hombre)';
             $latest_subject = Subject::latest()->first();
 
@@ -49,15 +46,18 @@ class SubjectController extends Controller
 
             $data['question_id'] = Question::where('name', $question_name)->value('id');
 
-            Subject::create($data);
+            $subject = Subject::create($data);
 
-            $user = $request->user();
-            $user->step = 'instructions';
-            $user->save();
+            return [
+                $subject->id,
+                $question_name
+            ];
         });
 
         return response()->json([
-            'message' => 'Datos guardados correctamente'
+            'message' => 'Datos guardados correctamente',
+            'subject_id' => $response[0],
+            'question_name' => $response[1],
         ], 200);
     }
 }

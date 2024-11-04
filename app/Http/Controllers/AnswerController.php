@@ -14,15 +14,14 @@ class AnswerController extends Controller
             'answer' => ['required', 'string'],
             'seconds' => ['required', 'integer'],
             'in_time' => ['required', 'boolean'],
+            'subject_id' => ['required', 'integer', 'exists:subjects,id'],
             'question_id' => ['required', 'integer', 'exists:questions,id'],
         ]);
         
-        DB::transaction(function () use ($data, $request) {
-            $user = $request->user();
-
+        DB::transaction(function () use ($data) {
             Answer::updateOrInsert(
                 [
-                    'subject_id' => $user->subject->id,
+                    'subject_id' => $data['subject_id'],
                     'question_id' => $data['question_id']
                 ],
                 [
@@ -33,11 +32,6 @@ class AnswerController extends Controller
                     'updated_at' => now()
                 ]
             );
-
-            if ($user->subject->question_id == $data['question_id']) {
-                $user->step = 'thank-you';
-                $user->save();
-            }
         });
 
         return response()->json([

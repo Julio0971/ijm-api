@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\Subject;
 use App\Models\Question;
 
@@ -27,7 +26,6 @@ class SubjectFactory extends Factory
             'speciality' => fake()->sentence(3),
             'grade' => fake()->randomElement([1, 2, 3, 4, 5, 6, 7, 8]),
             'participated_before' => fake()->boolean(),
-            'user_id' => User::where('username', 'participante')->value('id'),
             'question_id' => Question::whereNotIn('name', ['Camino al trabajo', 'La cena'])->inRandomOrder()->value('id')
         ];
     }
