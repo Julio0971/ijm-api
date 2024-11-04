@@ -16,8 +16,8 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index () {
-        return Subject::with(['question.answer', 'answers.question'])->paginate(10);
+    public function index (Request $request) {
+        return Subject::with(['question.answer', 'answers.question'])->paginate($request->query('per_page') ?: 10);
     }
 
     /**

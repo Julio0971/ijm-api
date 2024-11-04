@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use DateTimeInterface;
 
 class Subject extends Model
 {
+    use HasFactory;
+
     protected $guarded = [];
 
     public function user () {
