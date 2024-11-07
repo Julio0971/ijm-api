@@ -16,7 +16,15 @@ class SubjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index (Request $request) {
-        return Subject::with(['question.answer', 'answers.question'])->paginate($request->query('per_page') ?: 10);
+        $paginate = $request->query('per_page');
+
+        if ($request->query('per_page') == 0) {
+            $paginate = 10;
+        } else if ($request->query('per_page') == -1) {
+            $paginate = Subject::count();
+        }
+
+        return Subject::with(['question', 'answers.question'])->paginate($paginate);
     }
 
     /**
@@ -35,13 +43,15 @@ class SubjectController extends Controller
         ]);
 
         $response = DB::transaction(function () use ($data) {
-            $question_name = 'Variante 1 (hombre)';
-            $latest_subject = Subject::latest()->first();
+            $question_name = '';
+            $next_subject_id = Subject::count() + 1;
 
-            if ($latest_subject && $latest_subject->id % 3 == 0) {
-                $question_name = 'Variante 3 (neutro)';
-            } else if ($latest_subject && $latest_subject->id % 2 == 0) {
+            if (($next_subject_id - 1) % 3 == 0) {
+                $question_name = 'Variante 1 (hombre)';
+            } else if (($next_subject_id - 2) % 3 == 0) {
                 $question_name = 'Variante 2 (mujer)';
+            } else if (($next_subject_id - 3) % 3 == 0) {
+                $question_name = 'Variante 3 (neutro)';
             }
 
             $data['question_id'] = Question::where('name', $question_name)->value('id');

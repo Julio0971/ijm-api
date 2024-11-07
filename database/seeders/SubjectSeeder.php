@@ -14,6 +14,8 @@ class SubjectSeeder extends Seeder
      * @return void
      */
     public function run () {
-        Subject::factory()->count(50)->create();
+        for ($i = 0; $i < 50; $i++) { 
+            Subject::factory()->create();
+        }
     }
 }
